@@ -10,7 +10,25 @@ Install with [npm](https://www.npmjs.com/):
 
 ## Usage
 
-- [ ] Write usage instructions
+### Entity
+
+Entity's equability is Identifier.
+
+### ValueObject
+
+> Value object is an entity’s state, describing something about the entity or the things it owns.
+
+ValueObject's equability is values.
+
+### Repository
+
+#### NonNullableBaseRepository
+
+#### NullableBaseRepository
+
+### Serializer
+
+> JSON <-> Entity 
 
 ## Changelog
 

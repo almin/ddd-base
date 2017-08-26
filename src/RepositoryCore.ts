@@ -5,13 +5,13 @@ import { Identifier } from "./Identifier";
 
 export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
     private map: MapLike<string, P>;
-    private lastUsed: P | null;
+    private lastUsed: P | undefined;
 
     constructor() {
         this.map = new MapLike<string, P>();
     }
 
-    getLastUsed(): P | null {
+    getLastSaved(): P | undefined {
         return this.lastUsed;
     }
 
@@ -34,7 +34,7 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
     delete(entity: P) {
         this.map.delete(String(entity.id.toValue()));
         if (this.lastUsed === entity) {
-            this.lastUsed = null;
+            delete this.lastUsed;
         }
     }
 
@@ -49,7 +49,7 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
     }
 
     clear(): void {
-        this.lastUsed = null;
+        delete this.lastUsed;
         this.map.clear();
     }
 }

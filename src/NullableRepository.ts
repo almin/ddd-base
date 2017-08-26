@@ -2,15 +2,15 @@
 import { Entity } from "./Entity";
 import { RepositoryCore } from "./RepositoryCore";
 
-export class NonNullableBaseRepository<T extends Entity<any>> {
+export class NullableRepository<T extends Entity<any>> {
     private core: RepositoryCore<T["id"], T>;
 
-    constructor(protected initialEntity: T) {
-        this.core = new RepositoryCore();
+    constructor() {
+        this.core = new RepositoryCore<T["id"], T>();
     }
 
-    get(): T {
-        return this.core.getLastUsed() || this.initialEntity;
+    get(): T | undefined {
+        return this.core.getLastSaved();
     }
 
     getAll(): T[] {
