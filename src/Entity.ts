@@ -8,6 +8,9 @@ export abstract class Entity<Id extends Identifier<any>> {
         this.id = id;
     }
 
+    /**
+     * Check equality by identifier
+     */
     equals(object?: Entity<Id>): boolean {
         if (object == null || object == undefined) {
             return false;

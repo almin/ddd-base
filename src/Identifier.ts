@@ -5,8 +5,7 @@
  * ## Example
  *
  * ```ts
- * class MyEntityIdentifier extends Identifier<string>{
- * }
+ * class MyEntityIdentifier extends Identifier<string>{}
  * ```
  */
 export class Identifier<T> {
@@ -29,6 +28,9 @@ export class Identifier<T> {
         return `${constructorName}(${String(this.value)})`;
     }
 
+    /**
+     * Return raw value of identifier
+     */
     toValue(): T {
         return this.value;
     }

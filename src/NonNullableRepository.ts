@@ -2,6 +2,10 @@
 import { Entity } from "./Entity";
 import { RepositoryCore } from "./RepositoryCore";
 
+/**
+ * NonNullableRepository has initial value.
+ * In other words, NonNullableRepository#get always return a value.
+ */
 export class NonNullableRepository<T extends Entity<any>> {
     private core: RepositoryCore<T["id"], T>;
 

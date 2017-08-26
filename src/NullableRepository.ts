@@ -2,6 +2,10 @@
 import { Entity } from "./Entity";
 import { RepositoryCore } from "./RepositoryCore";
 
+/**
+ * NullableRepository has not initial value.
+ * In other word, NullableRepository#get may return undefined.
+ */
 export class NullableRepository<T extends Entity<any>> {
     private core: RepositoryCore<T["id"], T>;
 
