@@ -1,0 +1,61 @@
+{
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "author": "azu",
+  "license": "MIT",
+  "files": [
+    "bin/",
+    "lib/",
+    "src/"
+  ],
+  "name": "ddd-base",
+  "version": "1.0.0",
+  "description": "DDD base class library for JavaScript application.",
+  "main": "lib/ddd-base.js",
+  "scripts": {
+    "precommit": "lint-staged",
+    "postcommit": "git reset",
+    "prettier": "prettier --write '{src,test}/**/*.ts'",
+    "test": "mocha test/",
+    "build": "cross-env NODE_ENV=production tsc -p .",
+    "watch": "tsc -p . --watch",
+    "prepublish": "npm run --if-present build"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,css}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "keywords": [
+    "ddd",
+    "util",
+    "base",
+    "class"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/almin/ddd-base.git"
+  },
+  "bugs": {
+    "url": "https://github.com/almin/ddd-base/issues"
+  },
+  "homepage": "https://github.com/almin/ddd-base",
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.0.25",
+    "cross-env": "^5.0.5",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.4",
+    "mocha": "^3.5.0",
+    "prettier": "1.6.0-beta2",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.4.2"
+  },
+  "dependencies": {
+    "map-like": "^2.0.0",
+    "shallow-equal-object": "^1.0.1"
+  }
+}
