@@ -1,6 +1,13 @@
-# ddd-base
+# ddd-base [![Build Status](https://travis-ci.org/almin/ddd-base.svg?branch=master)](https://travis-ci.org/almin/ddd-base)
+
+**Status**: Experimental
 
 DDD base class library for JavaScript application.
+
+**Notes**:
+
+This library is not depended on [Almin]()https://github.com/almin/almin).
+You can use it with other JavaScript framework.
 
 ## Install
 
