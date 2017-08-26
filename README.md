@@ -6,7 +6,7 @@ DDD base class library for JavaScript application.
 
 **Notes**:
 
-This library is not depended on [Almin]()https://github.com/almin/almin).
+This library is not depended on [Almin](https://github.com/almin/almin).
 You can use it with other JavaScript framework.
 
 ## Install
