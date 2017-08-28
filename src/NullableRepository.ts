@@ -14,7 +14,7 @@ export class NullableRepository<T extends Entity<any>> {
         this.core = new RepositoryCore<T["id"], T>();
     }
 
-    protected get map(): MapLike<string, T> {
+    get map(): MapLike<string, T> {
         return this.core.map;
     }
 
