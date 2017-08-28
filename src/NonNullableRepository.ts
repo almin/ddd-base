@@ -11,7 +11,7 @@ export class NonNullableRepository<T extends Entity<any>> {
     private core: RepositoryCore<T["id"], T>;
 
     constructor(protected initialEntity: T) {
-        this.core = new RepositoryCore();
+        this.core = new RepositoryCore(new MapLike());
     }
 
     get map(): MapLike<string, T> {
