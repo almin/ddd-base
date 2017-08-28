@@ -1,6 +1,7 @@
 // MIT © 2017 azu
 import { Entity } from "./Entity";
 import { RepositoryCore } from "./RepositoryCore";
+import { MapLike } from "map-like";
 
 /**
  * NullableRepository has not initial value.
@@ -11,6 +12,10 @@ export class NullableRepository<T extends Entity<any>> {
 
     constructor() {
         this.core = new RepositoryCore<T["id"], T>();
+    }
+
+    protected get map(): MapLike<string, T> {
+        return this.core.map;
     }
 
     get(): T | undefined {

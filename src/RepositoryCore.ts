@@ -4,7 +4,7 @@ import { MapLike } from "map-like";
 import { Identifier } from "./Identifier";
 
 export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
-    private map: MapLike<string, P>;
+    public map: MapLike<string, P>;
     private lastUsed: P | undefined;
 
     constructor() {

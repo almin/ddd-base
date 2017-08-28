@@ -1,6 +1,7 @@
 // MIT © 2017 azu
 import { Entity } from "./Entity";
 import { RepositoryCore } from "./RepositoryCore";
+import { MapLike } from "map-like";
 
 /**
  * NonNullableRepository has initial value.
@@ -11,6 +12,10 @@ export class NonNullableRepository<T extends Entity<any>> {
 
     constructor(protected initialEntity: T) {
         this.core = new RepositoryCore();
+    }
+
+    protected get map(): MapLike<string, T> {
+        return this.core.map;
     }
 
     get(): T {
