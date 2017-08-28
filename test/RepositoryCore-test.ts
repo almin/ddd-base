@@ -3,6 +3,7 @@ import { Entity } from "../src/Entity";
 import { Identifier } from "../src/Identifier";
 import { RepositoryCore } from "../src/RepositoryCore";
 import * as assert from "assert";
+import { MapLike } from "map-like";
 
 class AIdentifier extends Identifier<string> {}
 
@@ -11,7 +12,7 @@ class AEntity extends Entity<AIdentifier> {}
 describe("RepositoryCore", () => {
     describe("getLastSave", () => {
         it("should return lastSaved entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>();
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
             assert.strictEqual(repository.getLastSaved(), undefined, "return null by default");
             // save entity
             const entity = new AEntity(new AIdentifier("a"));
@@ -24,14 +25,14 @@ describe("RepositoryCore", () => {
     });
     describe("findById", () => {
         it("should return entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>();
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
             const entity = new AEntity(new AIdentifier("a"));
             repository.save(entity);
             // hit same id
             assert.strictEqual(repository.findById(entity.id), entity);
         });
         it("when not found, should return undefined", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>();
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
             const entity = new AEntity(new AIdentifier("a"));
             // hit same id
             assert.strictEqual(repository.findById(entity.id), undefined);
@@ -39,7 +40,7 @@ describe("RepositoryCore", () => {
     });
     describe("getAll", () => {
         it("should return all entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>();
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
             const entity = new AEntity(new AIdentifier("a"));
             repository.save(entity);
             assert.deepStrictEqual(repository.getAll(), [entity]);
@@ -47,7 +48,7 @@ describe("RepositoryCore", () => {
     });
     describe("delete", () => {
         it("delete entity, it to be not found", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>();
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
             const entity = new AEntity(new AIdentifier("a"));
             repository.save(entity);
             // delete
@@ -59,7 +60,7 @@ describe("RepositoryCore", () => {
     describe("deleteById", () => {
         it("should delete by id", () => {
             it("delete entity, it to be not found", () => {
-                const repository = new RepositoryCore<AIdentifier, AEntity>();
+                const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
                 const entity = new AEntity(new AIdentifier("a"));
                 repository.save(entity);
                 // delete
@@ -71,7 +72,7 @@ describe("RepositoryCore", () => {
     });
     describe("clear", () => {
         it("should clear all entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>();
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
             const entity = new AEntity(new AIdentifier("a"));
             repository.save(entity);
             repository.save(entity);
