@@ -29,9 +29,48 @@ ValueObject's equability is values.
 
 ### Repository
 
+`Repository` collect entity.
+
 #### NonNullableBaseRepository
 
+NonNullableRepository has initial value.
+In other words, NonNullableRepository#get always return a value.
+
+```ts
+export declare class NonNullableRepository<T extends Entity<any>> {
+    protected initialEntity: T;
+    private core;
+    constructor(initialEntity: T);
+    readonly map: MapLike<string, T>;
+    readonly events: RepositoryEventEmitter;
+    get(): T;
+    getAll(): T[];
+    findById(entityId?: T["id"]): T | undefined;
+    save(entity: T): void;
+    delete(entity: T): void;
+    clear(): void;
+}
+```
+
 #### NullableBaseRepository
+
+NullableRepository has not initial value.
+In other word, NullableRepository#get may return undefined.
+
+```ts
+export declare class NullableRepository<T extends Entity<any>> {
+    private core;
+    constructor();
+    readonly map: MapLike<string, T>;
+    readonly events: RepositoryEventEmitter;
+    get(): T | undefined;
+    getAll(): T[];
+    findById(entityId?: T["id"]): T | undefined;
+    save(entity: T): void;
+    delete(entity: T): void;
+    clear(): void;
+}
+```
 
 ### Serializer
 

@@ -1,14 +1,17 @@
 // MIT © 2017 azu
-import { Entity } from "./Entity";
+import { Entity } from "../Entity";
 import { MapLike } from "map-like";
-import { Identifier } from "./Identifier";
+import { Identifier } from "../Identifier";
+import { RepositoryDeletedEvent, RepositoryEventEmitter, RepositorySavedEvent } from "./RepositoryEventEmitter";
 
 export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
-    public map: MapLike<string, P>;
+    public readonly map: MapLike<string, P>;
+    public readonly events: RepositoryEventEmitter;
     private lastUsed: P | undefined;
 
     constructor(map: MapLike<string, P>) {
         this.map = map;
+        this.events = new RepositoryEventEmitter();
     }
 
     getLastSaved(): P | undefined {
@@ -29,6 +32,7 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
     save(entity: P): void {
         this.lastUsed = entity;
         this.map.set(String(entity.id.toValue()), entity);
+        this.events.emit(new RepositorySavedEvent(entity));
     }
 
     delete(entity: P) {
@@ -36,6 +40,7 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
         if (this.lastUsed === entity) {
             delete this.lastUsed;
         }
+        this.events.emit(new RepositoryDeletedEvent(entity));
     }
 
     deleteById(entityId?: T) {
@@ -49,7 +54,6 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<any>> {
     }
 
     clear(): void {
-        delete this.lastUsed;
-        this.map.clear();
+        this.map.forEach(entity => this.delete(entity));
     }
 }

@@ -1,16 +1,17 @@
 // MIT © 2017 azu
-import { Entity } from "./Entity";
+import { Entity } from "../Entity";
 import { RepositoryCore } from "./RepositoryCore";
 import { MapLike } from "map-like";
+import { RepositoryEventEmitter } from "./RepositoryEventEmitter";
 
 /**
- * NullableRepository has not initial value.
- * In other word, NullableRepository#get may return undefined.
+ * NonNullableRepository has initial value.
+ * In other words, NonNullableRepository#get always return a value.
  */
-export class NullableRepository<T extends Entity<any>> {
+export class NonNullableRepository<T extends Entity<any>> {
     private core: RepositoryCore<T["id"], T>;
 
-    constructor() {
+    constructor(protected initialEntity: T) {
         this.core = new RepositoryCore(new MapLike());
     }
 
@@ -18,8 +19,12 @@ export class NullableRepository<T extends Entity<any>> {
         return this.core.map;
     }
 
-    get(): T | undefined {
-        return this.core.getLastSaved();
+    get events(): RepositoryEventEmitter {
+        return this.core.events;
+    }
+
+    get(): T {
+        return this.core.getLastSaved() || this.initialEntity;
     }
 
     getAll(): T[] {

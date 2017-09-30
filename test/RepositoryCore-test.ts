@@ -1,9 +1,10 @@
 // MIT © 2017 azu
 import { Entity } from "../src/Entity";
 import { Identifier } from "../src/Identifier";
-import { RepositoryCore } from "../src/RepositoryCore";
+import { RepositoryCore } from "../src/repository/RepositoryCore";
 import * as assert from "assert";
 import { MapLike } from "map-like";
+import { RepositoryDeletedEvent, RepositorySavedEvent } from "../src/repository/RepositoryEventEmitter";
 
 class AIdentifier extends Identifier<string> {}
 
@@ -80,6 +81,26 @@ describe("RepositoryCore", () => {
             assert.ok(repository.getAll().length > 0);
             repository.clear();
             assert.ok(repository.getAll().length === 0, "should be cleared");
+        });
+    });
+    describe("events", () => {
+        it("should emit Events", () => {
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
+            const entity = new AEntity(new AIdentifier("a"));
+            let count = 0;
+            repository.events.onSave(event => {
+                count++;
+                assert.ok(event instanceof RepositorySavedEvent);
+                assert.strictEqual(event.entity, entity);
+            });
+            repository.events.onDelete(event => {
+                count++;
+                assert.ok(event instanceof RepositoryDeletedEvent);
+                assert.strictEqual(event.entity, entity);
+            });
+            repository.save(entity);
+            repository.delete(entity);
+            assert.strictEqual(count, 2);
         });
     });
 });
