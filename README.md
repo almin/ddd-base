@@ -19,13 +19,47 @@ Install with [npm](https://www.npmjs.com/):
 
 ### Entity
 
+> Entities are domain concepts that have a unique identity in the problem domain.
+
 Entity's equability is Identifier.
+
+```ts
+import {Identifier,Entity} from "ddd-base";
+// Entity A
+class AIdentifier extends Identifier<string> {}
+class AEntity extends Entity<AIdentifier> {}
+// Entity B
+class BIdentifier extends Identifier<string> {}
+class BEntity extends Entity<BIdentifier> {}
+// A is not B
+const a = new AEntity(new AIdentifier("1"));
+const b = new BEntity(new BIdentifier("1"));
+assert.ok(!a.equals(b), "A is not B");
+```
 
 ### ValueObject
 
 > Value object is an entity’s state, describing something about the entity or the things it owns.
 
 ValueObject's equability is values.
+
+```ts
+import {Identifier,Entity} from "ddd-base";
+// X ValueObject
+class XValue extends ValueObject {
+    constructor(public x: number) {
+        super();
+    }
+}
+// x1's value equal to x2's value
+const x1 = new XValue(42);
+const x2 = new XValue(42);
+console.log(x1.equals(x2));// => true
+// x3's value not equal both
+const x3 = new XValue(1);
+console.log(x1.equals(x3));// => false
+console.log(x2.equals(x3));// => false
+```
 
 ### Repository
 
