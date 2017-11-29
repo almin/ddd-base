@@ -9,7 +9,7 @@ DDD base class library for JavaScript client-side application.
 This library is not depended on [Almin](https://github.com/almin/almin).
 You can use it with other JavaScript framework.
 
-## Feature
+## Features
 
 This library provide basic DDD base classes.
 
