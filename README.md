@@ -2,7 +2,7 @@
 
 **Status**: Experimental
 
-DDD base class library for JavaScript application.
+DDD base class library for JavaScript client-side application.
 
 **Notes**:
 
@@ -64,6 +64,12 @@ console.log(x2.equals(x3));// => false
 ### Repository
 
 `Repository` collect entity.
+
+Currently, `Repository` implementation is in-memory database like Map.
+This library provide following types of repository.
+
+- `NonNullableBaseRepository`
+- `NullableBaseRepository`
 
 #### NonNullableBaseRepository
 
@@ -215,6 +221,12 @@ it("fromJSON: JSON -> Entity", () => {
     );
 });
 ```
+
+## Real UseCase
+
+- [azu/irodr: RSS reader client like LDR for Inoreader.](https://github.com/azu/irodr "azu/irodr: RSS reader client like LDR for Inoreader.")
+- [azu/searchive: Search All My Documents{PDF}.](https://github.com/azu/searchive "azu/searchive: Search All My Documents{PDF}.")
+- [proofdict/editor: Proofdict editor.](https://github.com/proofdict/editor "proofdict/editor: Proofdict editor.")
 
 ## Changelog
 
