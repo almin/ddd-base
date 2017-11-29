@@ -39,6 +39,29 @@ describe("RepositoryCore", () => {
             assert.strictEqual(repository.findById(entity.id), undefined);
         });
     });
+    describe("findAll", () => {
+        it("predicate receive entity", () => {
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
+            const entity = new AEntity(new AIdentifier("a"));
+            repository.save(entity);
+            repository.findAll(entity => {
+                assert.ok(entity instanceof AEntity);
+                return true;
+            });
+        });
+        it("should return entities", () => {
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
+            const entity = new AEntity(new AIdentifier("a"));
+            repository.save(entity);
+            assert.deepStrictEqual(repository.findAll(() => true), [entity]);
+        });
+        it("when not found, should return empty array", () => {
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
+            const entity = new AEntity(new AIdentifier("a"));
+            repository.save(entity);
+            assert.deepStrictEqual(repository.findAll(() => false), []);
+        });
+    });
     describe("getAll", () => {
         it("should return all entity", () => {
             const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
