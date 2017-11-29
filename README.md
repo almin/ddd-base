@@ -47,6 +47,44 @@ const b = new BEntity(new BIdentifier("1"));
 assert.ok(!a.equals(b), "A is not B");
 ```
 
+More complex Entity example.
+
+```ts
+/ Entity A
+class AIdentifier extends Identifier<string> {}
+
+interface AEntityArgs {
+    id: AIdentifier;
+    a: number;
+    b: string;
+}
+
+class AEntity extends Entity<AIdentifier> {
+    private a: number;
+    private b: string;
+
+    constructor(args: AEntityArgs) {
+        super(args.id);
+        this.a = args.a;
+        this.b = args.b;
+    }
+
+    toJSON(): AEntityJSON {
+        return {
+            id: this.id.toValue(),
+            a: this.a,
+            b: this.b
+        };
+    }
+}
+
+const entity = new AEntity({
+    id: new AIdentifier("a"),
+    a: 42,
+    b: "string"
+});
+```
+
 ### ValueObject
 
 > Value object is an entity’s state, describing something about the entity or the things it owns.
