@@ -67,7 +67,7 @@ console.log(x2.equals(x3));// => false
 
 #### NonNullableBaseRepository
 
-NonNullableRepository has initial value.
+`NonNullableRepository` has initial value.
 In other words, NonNullableRepository#get always return a value.
 
 ```ts
@@ -88,7 +88,7 @@ export declare class NonNullableRepository<T extends Entity<any>> {
 
 #### NullableBaseRepository
 
-NullableRepository has not initial value.
+`NullableRepository` has not initial value.
 In other word, NullableRepository#get may return undefined.
 
 ```ts
@@ -109,6 +109,112 @@ export declare class NullableRepository<T extends Entity<any>> {
 ### Serializer
 
 > JSON <-> Entity 
+
+DDD-base just define the interface of `Serializer` that does following converting.
+
+- Convert from JSON to Entity
+- Convert from Entity to JSON
+
+You can implement `Serializer` interface and use it.
+
+```ts
+export interface Serializer<Entity, JSON> {
+    /**
+     * Convert Entity to JSON format
+     */
+    toJSON(entity: Entity): JSON;
+
+    /**
+     * Convert JSON to Entity
+     */
+    fromJSON(json: JSON): Entity;
+}
+```
+
+
+Implementation:
+
+```ts
+// Entity A
+class AIdentifier extends Identifier<string> {}
+
+interface AEntityArgs {
+    id: AIdentifier;
+    a: number;
+    b: string;
+}
+
+class AEntity extends Entity<AIdentifier> {
+    private a: number;
+    private b: string;
+
+    constructor(args: AEntityArgs) {
+        super(args.id);
+        this.a = args.a;
+        this.b = args.b;
+    }
+
+    toJSON(): AEntityJSON {
+        return {
+            id: this.id.toValue(),
+            a: this.a,
+            b: this.b
+        };
+    }
+}
+// JSON
+interface AEntityJSON {
+    id: string;
+    a: number;
+    b: string;
+}
+
+// Serializer
+const ASerializer: Serializer<AEntity, AEntityJSON> = {
+    fromJSON(json) {
+        return new AEntity({
+            id: new AIdentifier(json.id),
+            a: json.a,
+            b: json.b
+        });
+    },
+    toJSON(entity) {
+        return entity.toJSON();
+    }
+};
+
+it("toJSON: Entity -> JSON", () => {
+    const entity = new AEntity({
+        id: new AIdentifier("a"),
+        a: 42,
+        b: "b prop"
+    });
+    const json = ASerializer.toJSON(entity);
+    assert.deepStrictEqual(json, {
+        id: "a",
+        a: 42,
+        b: "b prop"
+    });
+});
+
+it("fromJSON: JSON -> Entity", () => {
+    const entity = ASerializer.fromJSON({
+        id: "a",
+        a: 42,
+        b: "b prop"
+    });
+    assert.ok(entity instanceof AEntity, "entity should be instanceof AEntity");
+    assert.deepStrictEqual(
+        ASerializer.toJSON(entity),
+        {
+            id: "a",
+            a: 42,
+            b: "b prop"
+        },
+        "JSON <-> Entity"
+    );
+});
+```
 
 ## Changelog
 
