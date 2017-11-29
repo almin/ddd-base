@@ -19,7 +19,7 @@
     "precommit": "lint-staged",
     "postcommit": "git reset",
     "prettier": "prettier --write '{src,test}/**/*.ts'",
-    "test": "mocha test/",
+    "test": "mocha 'test/*.ts'",
     "build": "cross-env NODE_ENV=production tsc -p .",
     "watch": "tsc -p . --watch",
     "prepublish": "npm run --if-present build"
@@ -49,6 +49,7 @@
     "@types/node": "^8.0.53",
     "cross-env": "^5.1.1",
     "husky": "^0.14.3",
+    "lerna": "^2.5.1",
     "lint-staged": "^5.0.0",
     "mocha": "^4.0.1",
     "prettier": "1.8.2",

@@ -3,8 +3,15 @@ import { Identifier } from "../src/Identifier";
 import { Entity } from "../src/Entity";
 import * as assert from "assert";
 
+// Entity A
 class AIdentifier extends Identifier<string> {}
+
 class AEntity extends Entity<AIdentifier> {}
+
+// Entity B
+class BIdentifier extends Identifier<string> {}
+
+class BEntity extends Entity<BIdentifier> {}
 
 describe("Entity", () => {
     describe("id", () => {
@@ -24,6 +31,11 @@ describe("Entity", () => {
             const a1 = new AEntity(new AIdentifier("a1-id"));
             const a2 = new AEntity(new AIdentifier("a2-id"));
             assert.ok(!a1.equals(a2), "a1 !== a2");
+        });
+        it("A is not B", () => {
+            const a = new AEntity(new AIdentifier("1"));
+            const b = new BEntity(new BIdentifier("1"));
+            assert.ok(!a.equals(b), "A is not B");
         });
     });
 });
