@@ -9,6 +9,16 @@ DDD base class library for JavaScript client-side application.
 This library is not depended on [Almin](https://github.com/almin/almin).
 You can use it with other JavaScript framework.
 
+## Feature
+
+This library provide basic DDD base classes.
+
+- `Entity`: Entity is domain concept that have a unique identity
+- `Identifier`: Identifier is unique identifier for an Entity
+- `ValueObject`: Value Object is an entity’s state, describing something about the entity
+- `Repository`: Repository is used to manage aggregate persistence
+- `Serializer`: Serializer is convert between Entity <-> JSON(Data object)
+
 ## Install
 
 Install with [npm](https://www.npmjs.com/):
@@ -62,6 +72,8 @@ console.log(x2.equals(x3));// => false
 ```
 
 ### Repository
+
+> A repository is used to manage aggregate persistence and retrieval while ensuring that there is a separation between the domain model and the data model. 
 
 `Repository` collect entity.
 
