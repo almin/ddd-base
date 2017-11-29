@@ -68,14 +68,6 @@ class AEntity extends Entity<AIdentifier> {
         this.a = args.a;
         this.b = args.b;
     }
-
-    toJSON(): AEntityJSON {
-        return {
-            id: this.id.toValue(),
-            a: this.a,
-            b: this.b
-        };
-    }
 }
 
 const entity = new AEntity({
