@@ -45,19 +45,19 @@
   },
   "homepage": "https://github.com/almin/ddd-base",
   "devDependencies": {
-    "@types/mocha": "^2.2.44",
-    "@types/node": "^8.0.53",
-    "cross-env": "^5.1.1",
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^9.4.6",
+    "cross-env": "^5.1.3",
     "husky": "^0.14.3",
-    "lerna": "^2.5.1",
-    "lint-staged": "^5.0.0",
-    "mocha": "^4.0.1",
-    "prettier": "1.8.2",
-    "ts-node": "^3.3.0",
-    "typescript": "^2.6.1"
+    "lerna": "^2.9.0",
+    "lint-staged": "^7.0.0",
+    "mocha": "^5.0.4",
+    "prettier": "1.11.1",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.7.2"
   },
   "dependencies": {
     "map-like": "^2.0.0",
-    "shallow-equal-object": "^1.0.1"
+    "shallow-equal-object": "^1.1.1"
   }
 }

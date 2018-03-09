@@ -19,7 +19,7 @@ export class NonNullableRepository<T extends Entity<any>> {
         return this.core.map;
     }
 
-    get events(): RepositoryEventEmitter {
+    get events(): RepositoryEventEmitter<T> {
         return this.core.events;
     }
 

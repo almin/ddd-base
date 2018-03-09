@@ -9,12 +9,12 @@ import { RepositoryDeletedEvent, RepositoryEventEmitter, RepositorySavedEvent } 
  */
 export class RepositoryCore<T extends Identifier<any>, P extends Entity<T>> {
     public readonly map: MapLike<string, P>;
-    public readonly events: RepositoryEventEmitter;
+    public readonly events: RepositoryEventEmitter<P>;
     private lastUsed: P | undefined;
 
     constructor(map: MapLike<string, P>) {
         this.map = map;
-        this.events = new RepositoryEventEmitter();
+        this.events = new RepositoryEventEmitter<P>();
     }
 
     /**

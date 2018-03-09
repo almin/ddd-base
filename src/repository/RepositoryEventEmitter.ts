@@ -5,21 +5,21 @@ import { Entity } from "../Entity";
 const SAVE = "SAVE";
 const DELETE = "DELETE";
 
-export class RepositorySavedEvent {
+export class RepositorySavedEvent<T> {
     readonly type = SAVE;
 
-    constructor(public entity: Entity<any>) {}
+    constructor(public entity: T) {}
 }
 
-export class RepositoryDeletedEvent {
+export class RepositoryDeletedEvent<T> {
     readonly type = DELETE;
 
-    constructor(public entity: Entity<any>) {}
+    constructor(public entity: T) {}
 }
 
-export type RepositoryEvents = RepositorySavedEvent | RepositoryDeletedEvent;
+export type RepositoryEvents<T = Entity<any>> = RepositorySavedEvent<T> | RepositoryDeletedEvent<T>;
 
-export class RepositoryEventEmitter {
+export class RepositoryEventEmitter<T extends Entity<any>> {
     private eventEmitter: EventEmitter;
 
     constructor() {
@@ -28,18 +28,27 @@ export class RepositoryEventEmitter {
         this.eventEmitter.setMaxListeners(0);
     }
 
-    emit(event: RepositoryEvents) {
+    emit(event: RepositoryEvents<T>) {
         this.eventEmitter.emit(event.type, event);
     }
 
-    onSave(handler: (event: RepositorySavedEvent) => void): () => void {
+    onChange(handler: (event: RepositoryEvents<T>) => void): () => void {
+        const releaseHandlers = [this.onSave(handler), this.onDelete(handler)];
+        return () => {
+            releaseHandlers.forEach(event => {
+                event();
+            });
+        };
+    }
+
+    onSave(handler: (event: RepositorySavedEvent<T>) => void): () => void {
         this.eventEmitter.on(SAVE, handler);
         return () => {
             return this.eventEmitter.removeListener(SAVE, handler);
         };
     }
 
-    onDelete(handler: (event: RepositoryDeletedEvent) => void): () => void {
+    onDelete(handler: (event: RepositoryDeletedEvent<T>) => void): () => void {
         this.eventEmitter.on(DELETE, handler);
         return () => {
             return this.eventEmitter.removeListener(DELETE, handler);
