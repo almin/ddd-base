@@ -125,5 +125,16 @@ describe("RepositoryCore", () => {
             repository.delete(entity);
             assert.strictEqual(count, 2);
         });
+        it("onChange is emitted when some is changed", () => {
+            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
+            const entity = new AEntity(new AIdentifier("a"));
+            let count = 0;
+            repository.events.onChange(_ => {
+                count++;
+            });
+            repository.save(entity);
+            repository.delete(entity);
+            assert.strictEqual(count, 2);
+        });
     });
 });
