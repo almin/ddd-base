@@ -34,16 +34,25 @@ Install with [npm](https://www.npmjs.com/):
 Entity's equability is Identifier.
 
 ```ts
-import {Identifier,Entity} from "ddd-base";
 // Entity A
 class AIdentifier extends Identifier<string> {}
-class AEntity extends Entity<AIdentifier> {}
+interface AProps {
+    id: AIdentifier;
+}
+class AEntity extends Entity<AProps> {}
 // Entity B
 class BIdentifier extends Identifier<string> {}
-class BEntity extends Entity<BIdentifier> {}
+interface BProps {
+    id: BIdentifier;
+}
+class BEntity extends Entity<BProps> {}
 // A is not B
-const a = new AEntity(new AIdentifier("1"));
-const b = new BEntity(new BIdentifier("1"));
+const a = new AEntity({
+    id: new AIdentifier("1"))
+});
+const b = new BEntity({
+    id: new BIdentifier("1")
+});
 assert.ok(!a.equals(b), "A is not B");
 ```
 
@@ -53,20 +62,15 @@ More complex Entity example.
 / Entity A
 class AIdentifier extends Identifier<string> {}
 
-interface AEntityArgs {
+interface AProps {
     id: AIdentifier;
     a: number;
     b: string;
 }
 
-class AEntity extends Entity<AIdentifier> {
-    private a: number;
-    private b: string;
-
-    constructor(args: AEntityArgs) {
-        super(args.id);
-        this.a = args.a;
-        this.b = args.b;
+class AEntity extends Entity<AProps> {
+    constructor(props: AProps) {
+        super(props);
     }
 }
 
@@ -84,19 +88,22 @@ const entity = new AEntity({
 ValueObject's equability is values.
 
 ```ts
-import {Identifier,Entity} from "ddd-base";
+import {Identifier, Entity} from "ddd-base";
+
 // X ValueObject
-class XValue extends ValueObject {
-    constructor(public x: number) {
-        super();
+type XProps = { value: number };
+
+class XValue extends ValueObject<XProps> {
+    constructor(props: XProps) {
+        super(props);
     }
 }
 // x1's value equal to x2's value
-const x1 = new XValue(42);
-const x2 = new XValue(42);
+const x1 = new XValue({ value: 42 });
+const x2 = new XValue({ value: 42 });
 console.log(x1.equals(x2));// => true
 // x3's value not equal both
-const x3 = new XValue(1);
+const x3 = new XValue({ value: 1 });
 console.log(x1.equals(x3));// => false
 console.log(x2.equals(x3));// => false
 ```
