@@ -1,23 +1,31 @@
 // MIT © 2017 azu
 import { Identifier } from "./Identifier";
+import { EntityLike, EntityLikeProps } from "./EntityLike";
 
-export abstract class Entity<Id extends Identifier<any>> {
-    public readonly id: Id;
+export const isEntity = (v: any): v is Entity<any> => {
+    return v instanceof Entity;
+};
 
-    constructor(id: Id) {
-        this.id = id;
+export class Entity<Props extends EntityLikeProps<Identifier<any>>> implements EntityLike<Props> {
+    props: Props;
+
+    constructor(props: Props) {
+        this.props = props;
     }
 
-    /**
+    /*
      * Check equality by identifier
      */
-    equals(object?: Entity<Id>): boolean {
+    equals(object?: Entity<Props>): boolean {
         if (object == null || object == undefined) {
             return false;
         }
         if (this === object) {
             return true;
         }
-        return this.id.equals(object.id);
+        if (!isEntity(object)) {
+            return false;
+        }
+        return this.props.id.equals(object.props.id);
     }
 }

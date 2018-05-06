@@ -6,27 +6,22 @@ describe("Serializer", () => {
     // Entity A
     class AIdentifier extends Identifier<string> {}
 
-    interface AEntityArgs {
+    interface AProps {
         id: AIdentifier;
         a: number;
         b: string;
     }
 
-    class AEntity extends Entity<AIdentifier> {
-        private a: number;
-        private b: string;
-
-        constructor(args: AEntityArgs) {
-            super(args.id);
-            this.a = args.a;
-            this.b = args.b;
+    class AEntity extends Entity<AProps> {
+        constructor(args: AProps) {
+            super(args);
         }
 
         toJSON(): AEntityJSON {
             return {
-                id: this.id.toValue(),
-                a: this.a,
-                b: this.b
+                id: this.props.id.toValue(),
+                a: this.props.a,
+                b: this.props.b
             };
         }
     }

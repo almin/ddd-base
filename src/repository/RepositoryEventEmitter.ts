@@ -1,6 +1,7 @@
 // MIT © 2017 azu
 import { EventEmitter } from "events";
 import { Entity } from "../Entity";
+import { EntityLike } from "../EntityLike";
 
 const SAVE = "SAVE";
 const DELETE = "DELETE";
@@ -19,7 +20,7 @@ export class RepositoryDeletedEvent<T> {
 
 export type RepositoryEvents<T = Entity<any>> = RepositorySavedEvent<T> | RepositoryDeletedEvent<T>;
 
-export class RepositoryEventEmitter<T extends Entity<any>> {
+export class RepositoryEventEmitter<T extends EntityLike<any>> {
     private eventEmitter: EventEmitter;
 
     constructor() {
