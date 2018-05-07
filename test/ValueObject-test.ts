@@ -27,7 +27,11 @@ describe("ValueObject", () => {
             const x2 = new XValue({
                 value: 4
             });
+            const x3 = {
+                value: 4
+            };
             assert.ok(!x1.equals(x2), "x1 !== x2");
+            assert.ok(!x1.equals(x3 as any), "x1 !== x3");
         });
     });
 });
