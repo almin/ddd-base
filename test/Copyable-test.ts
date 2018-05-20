@@ -41,6 +41,7 @@ describe("Copyable", () => {
         });
         assert.ok(newEntity instanceof CopyableEntity);
         assert.strictEqual(newEntity.props.value, "new");
+        assert.strictEqual(newEntity.cProps, "c");
         assert.strictEqual(newEntity.rootValue, "rootValue");
     });
     describe("#copy", () => {

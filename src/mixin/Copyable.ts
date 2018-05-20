@@ -1,5 +1,5 @@
-import { Identifier } from "./../Identifier";
-import { EntityLikeProps } from "./../EntityLike";
+import { Identifier } from "../Identifier";
+import { EntityLikeProps } from "../EntityLike";
 import { EntityLike } from "../EntityLike";
 
 /**
@@ -25,11 +25,11 @@ export type PartialMap<T> = { [K in keyof T]?: (prev: T[K]) => T[K] };
  * @see https://github.com/Microsoft/TypeScript/issues/22431#issuecomment-371908767
  */
 export const Copyable = <
-    K extends Constructor<EntityLike<EntityLikeProps<Identifier<any>>>>,
-    E extends InstanceType<K>,
-    Props extends E["props"]
+    ConstructorClass extends Constructor<EntityLike<EntityLikeProps<Identifier<any>>>>,
+    Entity extends InstanceType<ConstructorClass>,
+    Props extends Entity["props"]
 >(
-    BaseClass: K
+    BaseClass: ConstructorClass
 ) => {
     return class extends BaseClass {
         /**

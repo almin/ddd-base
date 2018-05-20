@@ -33,6 +33,38 @@ Install with [npm](https://www.npmjs.com/):
 
 Entity's equability is Identifier.
 
+#### Entity Props
+
+1. Define `XProps` type
+    - `XProps` should include `id: Identifier<string|number>` property.
+    
+```ts
+class XIdentifier extends Identifier<string> {}
+interface XProps {
+    id: XIdentifier; // <= required
+}
+```    
+
+2. Pass `XProps` to `Entity<XProps>`
+
+```ts
+class XEntity extends Entity<XProps> {
+    // implement
+}
+```
+
+You can get the props via `entity.props`.
+
+```ts
+const xEntity = new XEntity({
+    id: new XIdentifier("x");
+});
+console.log(xEntity.props.id);
+```
+
+
+**Example:**
+
 ```ts
 // Entity A
 class AIdentifier extends Identifier<string> {}
@@ -56,7 +88,7 @@ const b = new BEntity({
 assert.ok(!a.equals(b), "A is not B");
 ```
 
-More complex Entity example.
+Props can includes other property.
 
 ```ts
 / Entity A
@@ -101,12 +133,17 @@ class XValue extends ValueObject<XProps> {
 // x1's value equal to x2's value
 const x1 = new XValue({ value: 42 });
 const x2 = new XValue({ value: 42 });
+console.log(x1.props.value); // => 42
+console.log(x2.props.value); // => 42
 console.log(x1.equals(x2));// => true
 // x3's value not equal both
 const x3 = new XValue({ value: 1 });
 console.log(x1.equals(x3));// => false
 console.log(x2.equals(x3));// => false
 ```
+
+:memo: ValueObject's props have not a limitation like Entity.
+Because, ValueObject's equability is not identifier.
 
 ### Repository
 
@@ -270,6 +307,47 @@ it("fromJSON: JSON -> Entity", () => {
     );
 });
 ```
+
+## :memo: Design Note
+
+### Why entity and value object has `props`?
+
+It come from TypeScript limitation.
+TypeScript can not define type of class's properties.
+
+```ts
+// A limitation of generics interface
+type AEntityProps = {
+  key: string;
+}
+class AEntity extends Entity<AEntityProps> {}
+
+const aEntity = new AEntity({
+  key: "value"
+});
+// can not type
+aEntity.key; // type is any?
+``` 
+
+We can resolve this issue by introducing `props` property.
+
+```ts
+// `props` make realize typing
+type AEntityProps = {
+  key: string;
+}
+class AEntity extends Entity<AEntityProps> {}
+
+const aEntity = new AEntity({
+  key: "value"
+});
+// can not type
+aEntity.props; // props is AEntityProps
+``` 
+
+This approach is similar with [React](https://reactjs.org/).
+
+- [Why did React use 'props' as an abbreviation for property/properties? - Quora](https://www.quora.com/Why-did-React-use-props-as-an-abbreviation-for-property-properties)
 
 ## Real UseCase
 
