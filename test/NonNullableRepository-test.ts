@@ -14,12 +14,11 @@ describe("NonNullableRepository", () => {
 
             class ARepository extends NonNullableRepository<AEntity> {}
 
-            const aRepository = new ARepository(
-                new AEntity({
-                    id: new AIdentifier("a")
-                })
-            );
-            assert.strictEqual(aRepository.get(), aRepository);
+            const defaultEntity = new AEntity({
+                id: new AIdentifier("a")
+            });
+            const aRepository = new ARepository(defaultEntity);
+            assert.ok(aRepository.get().equals(defaultEntity));
         });
     });
 });
