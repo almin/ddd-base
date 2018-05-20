@@ -22,7 +22,8 @@
     "test": "mocha 'test/*.ts'",
     "build": "cross-env NODE_ENV=production tsc -p .",
     "watch": "tsc -p . --watch",
-    "prepublish": "npm run --if-present build"
+    "prepublish": "npm run clean && npm run build",
+    "clean": "rimraf lib/"
   },
   "lint-staged": {
     "*.{js,ts,tsx,css}": [
@@ -53,6 +54,7 @@
     "lint-staged": "^7.0.5",
     "mocha": "^5.1.1",
     "prettier": "1.12.1",
+    "rimraf": "^2.6.2",
     "ts-node": "^6.0.2",
     "typescript": "^2.8.3"
   },
