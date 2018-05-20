@@ -8,7 +8,11 @@ import { EntityLike } from "../EntityLike";
  * NullableRepository has not initial value.
  * In other word, NullableRepository#get may return undefined.
  */
-export class NullableRepository<Entity extends EntityLike<any>, Props extends Entity["props"], Id extends Props["id"]> {
+export class NullableRepository<
+    Entity extends EntityLike<any>,
+    Props extends Entity["props"] = Entity["props"],
+    Id extends Props["id"] = Props["id"]
+> {
     private core: RepositoryCore<Entity, Props, Id>;
 
     constructor() {

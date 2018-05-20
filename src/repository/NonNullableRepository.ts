@@ -10,8 +10,8 @@ import { EntityLike } from "../EntityLike";
  */
 export class NonNullableRepository<
     Entity extends EntityLike<any>,
-    Props extends Entity["props"],
-    Id extends Props["id"]
+    Props extends Entity["props"] = Entity["props"],
+    Id extends Props["id"] = Props["id"]
 > {
     private core: RepositoryCore<Entity, Props, Id>;
 
