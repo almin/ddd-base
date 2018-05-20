@@ -47,7 +47,7 @@ export const Copyable = <
          * ```
          */
         copy(partial: Partial<Props>): this {
-            const newProps = Object.assign(this.props, partial);
+            const newProps = Object.assign({}, this.props, partial);
             const Construct = this.constructor as any;
             return new Construct(newProps) as this;
         }

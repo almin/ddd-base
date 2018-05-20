@@ -37,13 +37,13 @@ Entity's equability is Identifier.
 
 1. Define `XProps` type
     - `XProps` should include `id: Identifier<string|number>` property.
-    
+
 ```ts
 class XIdentifier extends Identifier<string> {}
 interface XProps {
     id: XIdentifier; // <= required
 }
-```    
+```
 
 2. Pass `XProps` to `Entity<XProps>`
 
@@ -147,7 +147,7 @@ Because, ValueObject's equability is not identifier.
 
 ### Repository
 
-> A repository is used to manage aggregate persistence and retrieval while ensuring that there is a separation between the domain model and the data model. 
+> A repository is used to manage aggregate persistence and retrieval while ensuring that there is a separation between the domain model and the data model.
 
 `Repository` collect entity.
 
@@ -209,7 +209,7 @@ export declare class NullableRepository<Entity extends EntityLike<any>, Props ex
 
 ### Serializer
 
-> JSON <-> Entity 
+> JSON <-> Entity
 
 DDD-base just define the interface of `Serializer` that does following converting.
 
@@ -336,7 +336,7 @@ const aEntity = new AEntity({
 });
 // can not type
 aEntity.key; // type is any?
-``` 
+```
 
 We can resolve this issue by introducing `props` property.
 
@@ -352,11 +352,115 @@ const aEntity = new AEntity({
 });
 // can not type
 aEntity.props; // props is AEntityProps
-``` 
+```
 
 This approach is similar with [React](https://reactjs.org/).
 
 - [Why did React use 'props' as an abbreviation for property/properties? - Quora](https://www.quora.com/Why-did-React-use-props-as-an-abbreviation-for-property-properties)
+
+### Nesting props is ugly
+
+If you want to access nested propery via `props`, you have written `a.props.b.props.c`.
+It is ugly syntax.
+
+Instead of this, you can assign `props` values to entity's properties directly.
+
+```ts
+class ShoppingCartItemIdentifier extends Identifier<string> {
+}
+
+interface ShoppingCartItemProps {
+    id: ShoppingCartItemIdentifier;
+    name: string;
+    price: number;
+}
+
+class ShoppingCartItem extends Entity<ShoppingCartItemProps> implements ShoppingCartItemProps {
+    id: ShoppingCartItemIdentifier;
+    name: string;
+    price: number;
+
+    constructor(props: ShoppingCartItemProps) {
+        // pass to props
+        super(props);
+        // assign own property
+        this.id = props.id;
+        this.name = props.name;
+        this.price = props.price;
+    }
+}
+
+const item = new ShoppingCartItem({
+    id: new ShoppingCartItemIdentifier("item 1");
+    name: "bag";
+    price: 1000
+});
+
+console.log(item.props.price === item.price); // => true
+```
+
+### `props` is readonly by default
+
+> This is related with "Nesting props is ugly"
+
+`props` is `readonly` and `Object.freeze(props)` by default.
+
+**props**:
+
+It is clear that `props` are a Entity's **configureation**.
+They are **received** from above and immutable as far as the Entity receiving them is concerned.
+
+**state**:
+
+ddd-base does not define `state` type.
+But, `state` is own properties of Entity.
+It is mutable value and it can be modified by default.
+
+For example, `this.id`, `this.name`, and `this.price` are state of `ShoppingCartItem`.
+You can mofify this state.
+
+```ts
+class ShoppingCartItemIdentifier extends Identifier<string> {
+}
+
+interface ShoppingCartItemProps {
+    id: ShoppingCartItemIdentifier;
+    name: string;
+    price: number;
+}
+
+class ShoppingCartItem extends Entity<ShoppingCartItemProps> implements ShoppingCartItemProps {
+    id: ShoppingCartItemIdentifier;
+    name: string;
+    price: number;
+
+    constructor(props: ShoppingCartItemProps) {
+        // pass to props
+        super(props);
+        // assign own property
+        this.id = props.id;
+        this.name = props.name;
+        this.price = props.price;
+    }
+}
+```
+
+### Changing _props_ and _state_
+
+|                                           | *props* | *state* |
+| ----------------------------------------- | ------- | ------- |
+| Can get initial value from parent Entity? | Yes     | Yes     |
+| Can be changed by parent Entity?          | Yes     | No      |
+| Can set default values inside Entity?     | Yes     | Yes     |
+| Can change inside Entity?                 | No      | Yes     |
+| Can set initial value for child Entity?   | Yes     | Yes     |
+
+
+
+Related concept:
+
+- [react-guide/props-vs-state.md at master · uberVU/react-guide](https://github.com/uberVU/react-guide/blob/master/props-vs-state.md)
+- [Thinking in React - React](https://reactjs.org/docs/thinking-in-react.html)
 
 ## Real UseCase
 

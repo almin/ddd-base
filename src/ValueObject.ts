@@ -1,13 +1,14 @@
 import { shallowEqual } from "shallow-equal-object";
 
 /**
- * Value object definition
+ * Value object definition.
+ * props is readonly by design.
  */
 export class ValueObject<Props extends object> {
-    props: Props;
+    props: Readonly<Props>;
 
     constructor(props: Props) {
-        this.props = props;
+        this.props = Object.freeze(props);
     }
 
     /**
