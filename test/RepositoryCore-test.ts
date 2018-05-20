@@ -8,15 +8,21 @@ import { RepositoryDeletedEvent, RepositorySavedEvent } from "../src/repository/
 
 class AIdentifier extends Identifier<string> {}
 
-class AEntity extends Entity<AIdentifier> {}
+interface AEntityProps {
+    id: AIdentifier;
+}
+
+class AEntity extends Entity<AEntityProps> {}
 
 describe("RepositoryCore", () => {
     describe("getLastSave", () => {
         it("should return lastSaved entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
+            const repository = new RepositoryCore<AEntity>(new MapLike());
             assert.strictEqual(repository.getLastSaved(), undefined, "return null by default");
             // save entity
-            const entity = new AEntity(new AIdentifier("a"));
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             assert.strictEqual(repository.getLastSaved(), entity, "return entity that is saved at last");
             // delete
@@ -26,23 +32,29 @@ describe("RepositoryCore", () => {
     });
     describe("findById", () => {
         it("should return entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             // hit same id
-            assert.strictEqual(repository.findById(entity.id), entity);
+            assert.strictEqual(repository.findById(entity.props.id), entity);
         });
         it("when not found, should return undefined", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             // hit same id
-            assert.strictEqual(repository.findById(entity.id), undefined);
+            assert.strictEqual(repository.findById(entity.props.id), undefined);
         });
     });
     describe("findAll", () => {
         it("predicate receive entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             repository.findAll(entity => {
                 assert.ok(entity instanceof AEntity);
@@ -50,54 +62,66 @@ describe("RepositoryCore", () => {
             });
         });
         it("should return entities", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             assert.deepStrictEqual(repository.findAll(() => true), [entity]);
         });
         it("when not found, should return empty array", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             assert.deepStrictEqual(repository.findAll(() => false), []);
         });
     });
     describe("getAll", () => {
         it("should return all entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             assert.deepStrictEqual(repository.getAll(), [entity]);
         });
     });
     describe("delete", () => {
         it("delete entity, it to be not found", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             // delete
             repository.delete(entity);
             // not found
-            assert.strictEqual(repository.findById(entity.id), undefined);
+            assert.strictEqual(repository.findById(entity.props.id), undefined);
         });
     });
     describe("deleteById", () => {
         it("should delete by id", () => {
             it("delete entity, it to be not found", () => {
-                const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-                const entity = new AEntity(new AIdentifier("a"));
+                const repository = new RepositoryCore<AEntity>(new MapLike());
+                const entity = new AEntity({
+                    id: new AIdentifier("a")
+                });
                 repository.save(entity);
                 // delete
-                repository.deleteById(entity.id);
+                repository.deleteById(entity.props.id);
                 // not found
-                assert.strictEqual(repository.findById(entity.id), undefined);
+                assert.strictEqual(repository.findById(entity.props.id), undefined);
             });
         });
     });
     describe("clear", () => {
         it("should clear all entity", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             repository.save(entity);
             repository.save(entity);
             repository.save(entity);
@@ -108,8 +132,10 @@ describe("RepositoryCore", () => {
     });
     describe("events", () => {
         it("should emit Events", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             let count = 0;
             repository.events.onSave(event => {
                 count++;
@@ -126,8 +152,10 @@ describe("RepositoryCore", () => {
             assert.strictEqual(count, 2);
         });
         it("onChange is emitted when some is changed", () => {
-            const repository = new RepositoryCore<AIdentifier, AEntity>(new MapLike());
-            const entity = new AEntity(new AIdentifier("a"));
+            const repository = new RepositoryCore<AEntity>(new MapLike());
+            const entity = new AEntity({
+                id: new AIdentifier("a")
+            });
             let count = 0;
             repository.events.onChange(_ => {
                 count++;

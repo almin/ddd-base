@@ -1,20 +1,23 @@
 // MIT © 2017 azu
-import { Entity } from "../Entity";
 import { MapLike } from "map-like";
-import { Identifier } from "../Identifier";
 import { RepositoryDeletedEvent, RepositoryEventEmitter, RepositorySavedEvent } from "./RepositoryEventEmitter";
+import { EntityLike } from "../EntityLike";
 
 /**
  * Repository Core implementation
  */
-export class RepositoryCore<T extends Identifier<any>, P extends Entity<T>> {
-    public readonly map: MapLike<string, P>;
-    public readonly events: RepositoryEventEmitter<P>;
-    private lastUsed: P | undefined;
+export class RepositoryCore<
+    Entity extends EntityLike<any>,
+    Props extends Entity["props"] = Entity["props"],
+    Id extends Props["id"] = Props["id"]
+> {
+    public readonly map: MapLike<string, Entity>;
+    public readonly events: RepositoryEventEmitter<Entity>;
+    private lastUsed: Entity | undefined;
 
-    constructor(map: MapLike<string, P>) {
+    constructor(map: MapLike<string, Entity>) {
         this.map = map;
-        this.events = new RepositoryEventEmitter<P>();
+        this.events = new RepositoryEventEmitter<Entity>();
     }
 
     /**
@@ -22,7 +25,7 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<T>> {
      * This is useful on client-side implementation.
      * Because, client-side often access-user is a single user.
      */
-    getLastSaved(): P | undefined {
+    getLastSaved(): Entity | undefined {
         return this.lastUsed;
     }
 
@@ -30,7 +33,7 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<T>> {
      * Find a entity by `entityIdentifier` that is instance of Identifier class.
      * Return `undefined` if not found entity.
      */
-    findById(entityIdentifier?: T): P | undefined {
+    findById(entityIdentifier?: Id): Entity | undefined {
         if (!entityIdentifier) {
             return;
         }
@@ -40,31 +43,31 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<T>> {
     /**
      * Find all entity that `predicate(entity)` return true
      */
-    findAll(predicate: (entity: P) => boolean): P[] {
+    findAll(predicate: (entity: Entity) => boolean): Entity[] {
         return this.map.values().filter(predicate);
     }
 
     /**
      * Get all entities
      */
-    getAll(): P[] {
+    getAll(): Entity[] {
         return this.map.values();
     }
 
     /**
      * Save entity to the repository.
      */
-    save(entity: P): void {
+    save(entity: Entity): void {
         this.lastUsed = entity;
-        this.map.set(String(entity.id.toValue()), entity);
+        this.map.set(String(entity.props.id.toValue()), entity);
         this.events.emit(new RepositorySavedEvent(entity));
     }
 
     /**
      * Delete entity from the repository.
      */
-    delete(entity: P) {
-        this.map.delete(String(entity.id.toValue()));
+    delete(entity: Entity) {
+        this.map.delete(String(entity.props.id.toValue()));
         if (this.lastUsed === entity) {
             delete this.lastUsed;
         }
@@ -74,7 +77,7 @@ export class RepositoryCore<T extends Identifier<any>, P extends Entity<T>> {
     /**
      * Delete entity by `entityIdentifier` that is instance of Identifier class.
      */
-    deleteById(entityIdentifier?: T) {
+    deleteById(entityIdentifier?: Id) {
         if (!entityIdentifier) {
             return;
         }

@@ -1,45 +1,49 @@
 // MIT © 2017 azu
-import { Entity } from "../Entity";
 import { RepositoryCore } from "./RepositoryCore";
 import { MapLike } from "map-like";
 import { RepositoryEventEmitter } from "./RepositoryEventEmitter";
+import { EntityLike } from "../EntityLike";
 
 /**
  * NonNullableRepository has initial value.
  * In other words, NonNullableRepository#get always return a value.
  */
-export class NonNullableRepository<T extends Entity<any>> {
-    private core: RepositoryCore<T["id"], T>;
+export class NonNullableRepository<
+    Entity extends EntityLike<any>,
+    Props extends Entity["props"],
+    Id extends Props["id"]
+> {
+    private core: RepositoryCore<Entity, Props, Id>;
 
-    constructor(protected initialEntity: T) {
-        this.core = new RepositoryCore(new MapLike());
+    constructor(protected initialEntity: Entity) {
+        this.core = new RepositoryCore(new MapLike<string, Entity>());
     }
 
-    get map(): MapLike<string, T> {
+    get map(): MapLike<string, Entity> {
         return this.core.map;
     }
 
-    get events(): RepositoryEventEmitter<T> {
+    get events(): RepositoryEventEmitter<Entity> {
         return this.core.events;
     }
 
-    get(): T {
+    get(): Entity {
         return this.core.getLastSaved() || this.initialEntity;
     }
 
-    getAll(): T[] {
+    getAll(): Entity[] {
         return this.core.getAll();
     }
 
-    findById(entityId?: T["id"]): T | undefined {
+    findById(entityId?: Id): Entity | undefined {
         return this.core.findById(entityId);
     }
 
-    save(entity: T): void {
+    save(entity: Entity): void {
         this.core.save(entity);
     }
 
-    delete(entity: T) {
+    delete(entity: Entity) {
         this.core.delete(entity);
     }
 

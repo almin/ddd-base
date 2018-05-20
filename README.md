@@ -33,40 +33,76 @@ Install with [npm](https://www.npmjs.com/):
 
 Entity's equability is Identifier.
 
+#### Entity Props
+
+1. Define `XProps` type
+    - `XProps` should include `id: Identifier<string|number>` property.
+    
 ```ts
-import {Identifier,Entity} from "ddd-base";
+class XIdentifier extends Identifier<string> {}
+interface XProps {
+    id: XIdentifier; // <= required
+}
+```    
+
+2. Pass `XProps` to `Entity<XProps>`
+
+```ts
+class XEntity extends Entity<XProps> {
+    // implement
+}
+```
+
+You can get the props via `entity.props`.
+
+```ts
+const xEntity = new XEntity({
+    id: new XIdentifier("x");
+});
+console.log(xEntity.props.id);
+```
+
+
+**Example:**
+
+```ts
 // Entity A
 class AIdentifier extends Identifier<string> {}
-class AEntity extends Entity<AIdentifier> {}
+interface AProps {
+    id: AIdentifier;
+}
+class AEntity extends Entity<AProps> {}
 // Entity B
 class BIdentifier extends Identifier<string> {}
-class BEntity extends Entity<BIdentifier> {}
+interface BProps {
+    id: BIdentifier;
+}
+class BEntity extends Entity<BProps> {}
 // A is not B
-const a = new AEntity(new AIdentifier("1"));
-const b = new BEntity(new BIdentifier("1"));
+const a = new AEntity({
+    id: new AIdentifier("1"))
+});
+const b = new BEntity({
+    id: new BIdentifier("1")
+});
 assert.ok(!a.equals(b), "A is not B");
 ```
 
-More complex Entity example.
+Props can includes other property.
 
 ```ts
 / Entity A
 class AIdentifier extends Identifier<string> {}
 
-interface AEntityArgs {
+interface AProps {
     id: AIdentifier;
     a: number;
     b: string;
 }
 
-class AEntity extends Entity<AIdentifier> {
-    private a: number;
-    private b: string;
-
-    constructor(args: AEntityArgs) {
-        super(args.id);
-        this.a = args.a;
-        this.b = args.b;
+class AEntity extends Entity<AProps> {
+    constructor(props: AProps) {
+        super(props);
     }
 }
 
@@ -84,22 +120,30 @@ const entity = new AEntity({
 ValueObject's equability is values.
 
 ```ts
-import {Identifier,Entity} from "ddd-base";
+import {Identifier, Entity} from "ddd-base";
+
 // X ValueObject
-class XValue extends ValueObject {
-    constructor(public x: number) {
-        super();
+type XProps = { value: number };
+
+class XValue extends ValueObject<XProps> {
+    constructor(props: XProps) {
+        super(props);
     }
 }
 // x1's value equal to x2's value
-const x1 = new XValue(42);
-const x2 = new XValue(42);
+const x1 = new XValue({ value: 42 });
+const x2 = new XValue({ value: 42 });
+console.log(x1.props.value); // => 42
+console.log(x2.props.value); // => 42
 console.log(x1.equals(x2));// => true
 // x3's value not equal both
-const x3 = new XValue(1);
+const x3 = new XValue({ value: 1 });
 console.log(x1.equals(x3));// => false
 console.log(x2.equals(x3));// => false
 ```
+
+:memo: ValueObject's props have not a limitation like Entity.
+Because, ValueObject's equability is not identifier.
 
 ### Repository
 
@@ -119,19 +163,24 @@ This library provide following types of repository.
 In other words, NonNullableRepository#get always return a value.
 
 ```ts
-export declare class NonNullableRepository<T extends Entity<any>> {
-    protected initialEntity: T;
+/**
+ * NonNullableRepository has initial value.
+ * In other words, NonNullableRepository#get always return a value.
+ */
+export declare class NonNullableRepository<Entity extends EntityLike<any>, Props extends Entity["props"], Id extends Props["id"]> {
+    protected initialEntity: Entity;
     private core;
-    constructor(initialEntity: T);
-    readonly map: MapLike<string, T>;
-    readonly events: RepositoryEventEmitter;
-    get(): T;
-    getAll(): T[];
-    findById(entityId?: T["id"]): T | undefined;
-    save(entity: T): void;
-    delete(entity: T): void;
+    constructor(initialEntity: Entity);
+    readonly map: MapLike<string, Entity>;
+    readonly events: RepositoryEventEmitter<Entity>;
+    get(): Entity;
+    getAll(): Entity[];
+    findById(entityId?: Id): Entity | undefined;
+    save(entity: Entity): void;
+    delete(entity: Entity): void;
     clear(): void;
 }
+
 ```
 
 #### NullableBaseRepository
@@ -140,16 +189,20 @@ export declare class NonNullableRepository<T extends Entity<any>> {
 In other word, NullableRepository#get may return undefined.
 
 ```ts
-export declare class NullableRepository<T extends Entity<any>> {
+/**
+ * NullableRepository has not initial value.
+ * In other word, NullableRepository#get may return undefined.
+ */
+export declare class NullableRepository<Entity extends EntityLike<any>, Props extends Entity["props"], Id extends Props["id"]> {
     private core;
     constructor();
-    readonly map: MapLike<string, T>;
-    readonly events: RepositoryEventEmitter;
-    get(): T | undefined;
-    getAll(): T[];
-    findById(entityId?: T["id"]): T | undefined;
-    save(entity: T): void;
-    delete(entity: T): void;
+    readonly map: MapLike<string, Entity>;
+    readonly events: RepositoryEventEmitter<Entity>;
+    get(): Entity | undefined;
+    getAll(): Entity[];
+    findById(entityId?: Id): Entity | undefined;
+    save(entity: Entity): void;
+    delete(entity: Entity): void;
     clear(): void;
 }
 ```
@@ -263,6 +316,47 @@ it("fromJSON: JSON -> Entity", () => {
     );
 });
 ```
+
+## :memo: Design Note
+
+### Why entity and value object has `props`?
+
+It come from TypeScript limitation.
+TypeScript can not define type of class's properties.
+
+```ts
+// A limitation of generics interface
+type AEntityProps = {
+  key: string;
+}
+class AEntity extends Entity<AEntityProps> {}
+
+const aEntity = new AEntity({
+  key: "value"
+});
+// can not type
+aEntity.key; // type is any?
+``` 
+
+We can resolve this issue by introducing `props` property.
+
+```ts
+// `props` make realize typing
+type AEntityProps = {
+  key: string;
+}
+class AEntity extends Entity<AEntityProps> {}
+
+const aEntity = new AEntity({
+  key: "value"
+});
+// can not type
+aEntity.props; // props is AEntityProps
+``` 
+
+This approach is similar with [React](https://reactjs.org/).
+
+- [Why did React use 'props' as an abbreviation for property/properties? - Quora](https://www.quora.com/Why-did-React-use-props-as-an-abbreviation-for-property-properties)
 
 ## Real UseCase
 
