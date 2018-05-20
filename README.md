@@ -163,19 +163,24 @@ This library provide following types of repository.
 In other words, NonNullableRepository#get always return a value.
 
 ```ts
-export declare class NonNullableRepository<T extends Entity<any>> {
-    protected initialEntity: T;
+/**
+ * NonNullableRepository has initial value.
+ * In other words, NonNullableRepository#get always return a value.
+ */
+export declare class NonNullableRepository<Entity extends EntityLike<any>, Props extends Entity["props"], Id extends Props["id"]> {
+    protected initialEntity: Entity;
     private core;
-    constructor(initialEntity: T);
-    readonly map: MapLike<string, T>;
-    readonly events: RepositoryEventEmitter;
-    get(): T;
-    getAll(): T[];
-    findById(entityId?: T["id"]): T | undefined;
-    save(entity: T): void;
-    delete(entity: T): void;
+    constructor(initialEntity: Entity);
+    readonly map: MapLike<string, Entity>;
+    readonly events: RepositoryEventEmitter<Entity>;
+    get(): Entity;
+    getAll(): Entity[];
+    findById(entityId?: Id): Entity | undefined;
+    save(entity: Entity): void;
+    delete(entity: Entity): void;
     clear(): void;
 }
+
 ```
 
 #### NullableBaseRepository
@@ -184,16 +189,20 @@ export declare class NonNullableRepository<T extends Entity<any>> {
 In other word, NullableRepository#get may return undefined.
 
 ```ts
-export declare class NullableRepository<T extends Entity<any>> {
+/**
+ * NullableRepository has not initial value.
+ * In other word, NullableRepository#get may return undefined.
+ */
+export declare class NullableRepository<Entity extends EntityLike<any>, Props extends Entity["props"], Id extends Props["id"]> {
     private core;
     constructor();
-    readonly map: MapLike<string, T>;
-    readonly events: RepositoryEventEmitter;
-    get(): T | undefined;
-    getAll(): T[];
-    findById(entityId?: T["id"]): T | undefined;
-    save(entity: T): void;
-    delete(entity: T): void;
+    readonly map: MapLike<string, Entity>;
+    readonly events: RepositoryEventEmitter<Entity>;
+    get(): Entity | undefined;
+    getAll(): Entity[];
+    findById(entityId?: Id): Entity | undefined;
+    save(entity: Entity): void;
+    delete(entity: Entity): void;
     clear(): void;
 }
 ```
