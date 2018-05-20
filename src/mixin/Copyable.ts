@@ -35,9 +35,16 @@ export const Copyable = <
         /**
          * Return partial change of this object
          *
-         * e.g)
-         * `new Person("jack", 2).copy({age: 10})` is  `new Person("jack", 10)`
-         *
+         * Example:
+         * ```js
+         * new Person({
+         *   name "jack",
+         *   age: 2
+         * }).copy({age: 10})` is  `new Person({
+         *   name: "jack",
+         *   age: 10
+         * })
+         * ```
          */
         copy(partial: Partial<Props>): this {
             const newProps = Object.assign(this.props, partial);
@@ -48,9 +55,16 @@ export const Copyable = <
         /**
          * Return partial change of this object by using functions
          *
-         * e.g)
-         * `new Person("jack", 10).mapCopy({age: prev => prev+1})` is  `new Person("jack", 11)`
-         *
+         * Example:
+         * ```js
+         * new Person({
+         *   name "jack",
+         *   age: 2
+         * }).mapCopy({age: prev => prev+1})` is  `new Person({
+         *   name: "jack",
+         *   age: 3
+         * })
+         * ```
          */
         mapCopy(partial: PartialMap<Props>): this {
             const newProps: { [index: string]: any } = {};

@@ -15,3 +15,6 @@ export {
 } from "./repository/RepositoryEventEmitter";
 
 export { Serializer } from "./Serializer";
+// status: Experimental
+// mixin
+export { Copyable } from "./mixin/Copyable";
