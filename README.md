@@ -120,7 +120,7 @@ const entity = new AEntity({
 ValueObject's equability is values.
 
 ```ts
-import { ValueObject } from "ddd-base";
+import {ValueObject} from "ddd-base";
 
 // X ValueObject
 type XProps = { value: number };
