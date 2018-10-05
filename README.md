@@ -41,6 +41,8 @@ Identifier is a unique object for each entity.
 
 #### Entity Props
 
+Entity Props have to `id` props that is instance of `Identifier`.
+
 1. Define `XProps` type
     - `XProps` should include `id: Identifier<string|number>` property.
 
