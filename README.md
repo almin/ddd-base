@@ -99,7 +99,7 @@ assert.ok(!a.equals(b), "A is not B");
 Props can includes other property.
 
 ```ts
-/ Entity A
+// Entity A
 class AIdentifier extends Identifier<string> {}
 
 interface AProps {
