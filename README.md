@@ -526,7 +526,7 @@ But, `state` is own properties of Entity.
 It is mutable value and it can be modified by default.
 
 For example, `this.id`, `this.name`, and `this.price` are state of `ShoppingCartItem`.
-You can mofify this state.
+You can modify this state.
 
 ```ts
 class ShoppingCartItemIdentifier extends Identifier<string> {
