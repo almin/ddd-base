@@ -207,7 +207,108 @@ export declare class NullableRepository<Entity extends EntityLike<any>, Props ex
 }
 ```
 
-### Serializer
+### Converter
+
+> JSON <-> Props <-> Entity
+
+Converter is that convert JSON <-> Props <-> Entity.
+
+`createConverter` create interconversion function from `Props` and `JSON` types and mapping definition.
+
+```ts
+// Pass Props type and JSON types as generics
+// 1st argument is that a Constructor of entity that is required for creating entity from JSON
+// 2nd argument is that a mapping object
+// mapping object has tuple array for each property.
+// tuple is [Props to JSON, JSON to Props]  
+createConverter<PropsType, JSONType>(EntityConstructor, mappingObject)
+```
+
+mapping object has has tuple array for each property.
+
+```ts
+const converter = createConverter<EntityProps, EntityJSON>(Entity, {
+    id: [propsToJSON function, jsonToProps function],
+    // [(prop value) => json value, (json value) => prop value]
+});
+```
+
+Example of `createConveter`.
+
+```ts
+
+// Entity A
+class AIdentifier extends Identifier<string> {}
+
+interface AEntityArgs {
+    id: AIdentifier;
+    a: number;
+    b: string;
+}
+
+class AEntity extends Entity<AIdentifier> {
+    private a: number;
+    private b: string;
+
+    constructor(args: AEntityArgs) {
+        super(args.id);
+        this.a = args.a;
+        this.b = args.b;
+    }
+
+    toJSON(): AEntityJSON {
+        return {
+            id: this.id.toValue(),
+            a: this.a,
+            b: this.b
+        };
+    }
+}
+// JSON
+interface AEntityJSON {
+    id: string;
+    a: number;
+    b: string;
+}
+// Create converter
+// Tuple has two convert function that Props -> JSON and JSON -> Props
+const converter = createConverter<AProps, AEntityJSON>(AEntity, {
+    // conveter definition for each property.
+    id: [prop => prop.toValue(), json => new AIdentifier(json)],
+    a: [prop => prop, json => json],
+    b: [prop => prop, json => json]
+});
+const entity = new AEntity({
+    id: new AIdentifier("a"),
+    a: 42,
+    b: "b prop"
+});
+// Entity to JSON
+const json = converter.entityToJSON(entity);
+assert.deepStrictEqual(json, {
+    id: "a",
+    a: 42,
+    b: "b prop"
+});
+// JSON to Entity
+const entity_conveterted = converter.jsonToEntity(json);
+assert.deepStrictEqual(entity, entity_conveterted);
+// JSON to Props
+const props = converter.jsonToProps(json);
+assert.deepStrictEqual(props, entity.props);
+```
+
+:memo: Limitation: 
+
+Convert can be possible one for one converting.
+
+```
+// Can not do convert following pattern
+// JSON -> Entity
+// a -> b, c properties
+```
+
+### [Deprecated] Serializer
 
 > JSON <-> Entity
 

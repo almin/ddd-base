@@ -16,8 +16,6 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "precommit": "lint-staged",
-    "postcommit": "git reset",
     "prettier": "prettier --write '{src,test}/**/*.ts'",
     "test": "mocha 'test/*.ts'",
     "build": "cross-env NODE_ENV=production tsc -p .",
@@ -46,20 +44,26 @@
   },
   "homepage": "https://github.com/almin/ddd-base",
   "devDependencies": {
-    "@types/mocha": "^5.2.0",
-    "@types/node": "^10.1.2",
-    "cross-env": "^5.1.5",
-    "husky": "^0.14.3",
-    "lerna": "^2.11.0",
-    "lint-staged": "^7.1.1",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.11.4",
+    "cross-env": "^5.2.0",
+    "husky": "^1.1.0",
+    "lerna": "^3.4.1",
+    "lint-staged": "^7.3.0",
     "mocha": "^5.2.0",
-    "prettier": "1.12.1",
+    "prettier": "1.14.3",
     "rimraf": "^2.6.2",
-    "ts-node": "^6.0.3",
-    "typescript": "^2.8.3"
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.1"
   },
   "dependencies": {
     "map-like": "^2.0.0",
     "shallow-equal-object": "^1.1.1"
+  },
+  "husky": {
+    "hooks": {
+      "post-commit": "git reset",
+      "pre-commit": "lint-staged"
+    }
   }
 }
