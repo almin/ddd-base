@@ -33,6 +33,12 @@ Install with [npm](https://www.npmjs.com/):
 
 Entity's equability is Identifier.
 
+### Identifier
+
+Identifier is a unique object for each entity.
+
+`Entity#equals` check that the Entity's identifier is equaled to other entity's identifier.
+
 #### Entity Props
 
 1. Define `XProps` type
