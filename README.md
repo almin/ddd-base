@@ -17,7 +17,7 @@ This library provide basic DDD base classes.
 - `Identifier`: Identifier is unique identifier for an Entity
 - `ValueObject`: Value Object is an entity’s state, describing something about the entity
 - `Repository`: Repository is used to manage aggregate persistence
-- `Serializer`: Serializer is convert between Entity <-> JSON(Data object)
+- `Converter`: Converter convert between Entity <-> Props(Entity's props) <-> JSON(Serialized data object)
 
 ## Install
 
