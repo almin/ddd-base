@@ -13,11 +13,11 @@ You can use it with other JavaScript framework.
 
 This library provide basic DDD base classes.
 
-- `Entity`: Entity is domain concept that have a unique identity
-- `Identifier`: Identifier is unique identifier for an Entity
-- `ValueObject`: Value Object is an entity’s state, describing something about the entity
-- `Repository`: Repository is used to manage aggregate persistence
-- `Converter`: Converter convert between Entity <-> Props(Entity's props) <-> JSON(Serialized data object)
+- [`Entity`](#Entity): Entity is domain concept that have a unique identity
+- [`Identifier`](#Identifier): Identifier is unique identifier for an Entity
+- [`ValueObject`](#ValueObject): Value Object is an entity’s state, describing something about the entity
+- [`Repository`](#Repository): Repository is used to manage aggregate persistence
+- [`Converter`](#Converter): Converter convert between Entity <-> Props(Entity's props) <-> JSON(Serialized data object)
 
 ## Install
 
