@@ -12,6 +12,9 @@ export {
     RepositoryEvents
 } from "./repository/RepositoryEventEmitter";
 
+export { createConverter } from "./Converter";
+// @deprecated
+// Use `createConverter` instead of it
 export { Serializer } from "./Serializer";
 // status: Experimental
 // mixin

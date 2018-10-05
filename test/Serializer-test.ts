@@ -1,6 +1,5 @@
-import { Identifier, Serializer } from "../src";
-import { Entity } from "../src";
 import * as assert from "assert";
+import { Identifier, Serializer, Entity } from "../src";
 
 describe("Serializer", () => {
     // Entity A
@@ -51,6 +50,7 @@ describe("Serializer", () => {
             a: 42,
             b: "b prop"
         });
+
         const json = ASerializer.toJSON(entity);
         assert.deepStrictEqual(json, {
             id: "a",

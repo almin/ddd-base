@@ -1,11 +1,7 @@
 import { Identifier } from "../Identifier";
 import { EntityLikeProps } from "../EntityLike";
 import { EntityLike } from "../EntityLike";
-
-/**
- * Constructor type
- */
-export type Constructor<T = {}> = new (...args: any[]) => T;
+import { Constructor } from "../TypeUtil";
 
 /**
  *
