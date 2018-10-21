@@ -1,10 +1,14 @@
 import { shallowEqual } from "shallow-equal-object";
 
+export interface ValueObjectProps {
+    [index: string]: any;
+}
+
 /**
  * Value object definition.
  * props is readonly by design.
  */
-export class ValueObject<Props extends object> {
+export class ValueObject<Props extends ValueObjectProps> {
     props: Readonly<Props>;
 
     constructor(props: Props) {
@@ -16,7 +20,7 @@ export class ValueObject<Props extends object> {
      * It can be override.
      */
     equals(object?: ValueObject<Props>): boolean {
-        if (object == null || object == undefined) {
+        if (object === null || object === undefined) {
             return false;
         }
         if (object.props === undefined) {

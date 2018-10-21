@@ -1,5 +1,5 @@
 import assert = require("assert");
-import { Entity, Identifier, createConverter } from "../src";
+import { Entity, ValueObject, Identifier, createConverter } from "../src";
 
 // Entity A
 class AIdentifier extends Identifier<string> {}
@@ -30,6 +30,20 @@ interface AEntityJSON {
     b: string;
 }
 
+// ValueObject B
+// Entity A
+interface BValueProps {
+    a: number;
+    b: string;
+}
+
+class BValue extends ValueObject<BValueProps> {}
+
+interface BValueJSON {
+    a: number;
+    b: string;
+}
+
 describe("Converter", function() {
     it("should convert JSON <-> Entity", () => {
         const converter = createConverter<AProps, AEntityJSON>(AEntity, {
@@ -42,13 +56,13 @@ describe("Converter", function() {
             a: 42,
             b: "b prop"
         });
-        const json = converter.entityToJSON(entity);
+        const json = converter.toJSON(entity);
         assert.deepStrictEqual(json, {
             id: "a",
             a: 42,
             b: "b prop"
         });
-        const entity2 = converter.jsonToEntity(json);
+        const entity2 = converter.fromJSON(json);
         assert.deepStrictEqual(entity, entity2);
     });
     it("should convert Props <-> Entity", () => {
@@ -62,13 +76,30 @@ describe("Converter", function() {
             a: 42,
             b: "b prop"
         });
-        const json = converter.entityToJSON(entity);
+        const json = converter.toJSON(entity);
         assert.deepStrictEqual(json, {
             id: "a",
             a: 42,
             b: "b prop"
         });
-        const props = converter.jsonToProps(json);
+        const props = converter.JSONToProps(json);
         assert.deepStrictEqual(props, entity.props);
+    });
+    it("should convert JSON <-> ValueObject", () => {
+        const converter = createConverter<BValueProps, BValueJSON>(BValue, {
+            a: [prop => prop, json => json],
+            b: [prop => prop, json => json]
+        });
+        const value = new BValue({
+            a: 42,
+            b: "b prop"
+        });
+        const json = converter.toJSON(value);
+        assert.deepStrictEqual(json, {
+            a: 42,
+            b: "b prop"
+        });
+        const value2 = converter.fromJSON(json);
+        assert.deepStrictEqual(value, value2);
     });
 });
