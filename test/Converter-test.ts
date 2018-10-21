@@ -46,7 +46,7 @@ const BConverter = createConverter<BValueProps, BValueJSON>(BValue, {
     b2: [prop => prop, json => json]
 });
 
-// Parent Of A, B
+// Parent has A and B
 class ParentIdentifier extends Identifier<string> {}
 
 interface ParentJSON {
@@ -62,6 +62,12 @@ interface ParentProps {
 }
 
 class ParentEntity extends Entity<ParentProps> {}
+
+const ParentConverter = createConverter<ParentProps, ParentJSON>(ParentEntity, {
+    id: [prop => prop.toValue(), json => new ParentIdentifier(json)],
+    a: AConverter,
+    b: BConverter
+});
 
 describe("Converter", function() {
     it("should convert JSON <-> Entity", () => {
@@ -114,11 +120,6 @@ describe("Converter", function() {
     });
 
     it("should convert by child Converter", () => {
-        const ParentConverter = createConverter<ParentProps, ParentJSON>(ParentEntity, {
-            id: [prop => prop.toValue(), json => new ParentIdentifier(json)],
-            a: AConverter,
-            b: BConverter
-        });
         const a = new AEntity({
             id: new AIdentifier("a"),
             a1: 42,

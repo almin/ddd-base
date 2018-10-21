@@ -246,45 +246,33 @@ Example of `createConveter`.
 ```ts
 
 // Entity A
-class AIdentifier extends Identifier<string> {}
+class AIdentifier extends Identifier<string> {
+}
 
-interface AEntityArgs {
+interface AProps {
     id: AIdentifier;
-    a: number;
-    b: string;
+    a1: number;
+    a2: string;
 }
 
-class AEntity extends Entity<AIdentifier> {
-    private a: number;
-    private b: string;
-
-    constructor(args: AEntityArgs) {
-        super(args.id);
-        this.a = args.a;
-        this.b = args.b;
-    }
-
-    toJSON(): AEntityJSON {
-        return {
-            id: this.id.toValue(),
-            a: this.a,
-            b: this.b
-        };
+class AEntity extends Entity<AProps> {
+    constructor(args: AProps) {
+        super(args);
     }
 }
-// JSON
+
 interface AEntityJSON {
     id: string;
-    a: number;
-    b: string;
+    a1: number;
+    a2: string;
 }
+
 // Create converter
 // Tuple has two convert function that Props -> JSON and JSON -> Props
-const converter = createConverter<AProps, AEntityJSON>(AEntity, {
-    // conveter definition for each property.
+const AConverter = createConverter<AProps, AEntityJSON>(AEntity, {
     id: [prop => prop.toValue(), json => new AIdentifier(json)],
-    a: [prop => prop, json => json],
-    b: [prop => prop, json => json]
+    a1: [prop => prop, json => json],
+    a2: [prop => prop, json => json]
 });
 const entity = new AEntity({
     id: new AIdentifier("a"),
@@ -292,18 +280,15 @@ const entity = new AEntity({
     b: "b prop"
 });
 // Entity to JSON
-const json = converter.entityToJSON(entity);
+const json = AConverter.toJSON(entity);
 assert.deepStrictEqual(json, {
     id: "a",
     a: 42,
     b: "b prop"
 });
 // JSON to Entity
-const entity_conveterted = converter.jsonToEntity(json);
+const entity_conveterted = converter.fromJSON(json);
 assert.deepStrictEqual(entity, entity_conveterted);
-// JSON to Props
-const props = converter.jsonToProps(json);
-assert.deepStrictEqual(props, entity.props);
 ```
 
 :memo: Limitation: 
@@ -315,6 +300,40 @@ Convert can be possible one for one converting.
 // JSON -> Entity
 // a -> b, c properties
 ```
+
+#### Nesting Converter
+
+You can set `Converter` instead of mapping functions.
+This pattern called **Nesting Converter**.
+
+```ts
+// Parent has A and B
+class ParentIdentifier extends Identifier<string> {
+}
+
+interface ParentJSON {
+    id: string;
+    a: AEntityJSON;
+    b: BValueJSON;
+}
+
+interface ParentProps {
+    id: ParentIdentifier;
+    a: AEntity;
+    b: BValue;
+}
+
+class ParentEntity extends Entity<ParentProps> {
+}
+
+const ParentConverter = createConverter<ParentProps, ParentJSON>(ParentEntity, {
+    id: [prop => prop.toValue(), json => new ParentIdentifier(json)],
+    a: AConverter, // Set Conveter instead of mapping functions
+    b: BConverter
+});
+```
+
+For more details, see [test/Converter-test.ts](./test/Converter-test.ts).
 
 ### [Deprecated] Serializer
 

@@ -105,8 +105,9 @@ export const createConverter = <
     EntityConstructor extends Constructor<T> = Constructor<T>
 >(
     EntityConstructor: EntityConstructor,
-    // Props[P] => Entity or Value instance
+    // Props[P] => Entity or ValueObject
     // JSON[P] => json property
+    // Props[P].props => Entity's props or ValueObject's props
     mappingPropsAndJSON: {
         [P in keyof Props]:
             | [(prop: Props[P]) => JSON[P], (json: JSON[P]) => Props[P]]
