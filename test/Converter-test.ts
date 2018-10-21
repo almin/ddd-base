@@ -150,5 +150,7 @@ describe("Converter", function() {
         const parent_2 = ParentConverter.fromJSON(parentJSON);
         assert.ok(parent.equals(parent_2));
         assert.deepStrictEqual(parent, parent_2);
+        const parentJSON_2 = ParentConverter.propsToJSON(parent.props);
+        assert.deepStrictEqual(parentJSON, parentJSON_2);
     });
 });

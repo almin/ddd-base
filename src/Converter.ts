@@ -58,6 +58,22 @@ export class Converter<
     }
 
     /**
+     * Convert Props to JSON
+     */
+    propsToJSON(props: Props): JSON {
+        const json: any = {};
+        Object.keys(props).forEach(key => {
+            const mappingItem = this.mapping[key];
+            if (mappingItem instanceof Converter) {
+                json[key] = mappingItem.toJSON(props[key]);
+            } else {
+                json[key] = mappingItem[0](props[key]);
+            }
+        });
+        return json;
+    }
+
+    /**
      * Convert JSON to Props
      */
     JSONToProps(json: JSON): Props {
