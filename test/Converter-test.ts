@@ -1,5 +1,5 @@
 import assert = require("assert");
-import { Entity, ValueObject, Identifier, createConverter } from "../src";
+import { createConverter, Entity, Identifier, ValueObject } from "../src";
 
 // Entity A
 class AIdentifier extends Identifier<string> {}

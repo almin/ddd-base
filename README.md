@@ -221,7 +221,7 @@ export declare class NullableRepository<Entity extends EntityLike<any>, Props ex
 
 Converter is that convert JSON <-> Props <-> Entity.
 
-`createConverter` create interconversion function from `Props` and `JSON` types and mapping definition.
+`createConverter` create `Converter` instance from `Props` and `JSON` types and converting definition.
 
 ```ts
 // Pass Props type and JSON types as generics
@@ -229,10 +229,10 @@ Converter is that convert JSON <-> Props <-> Entity.
 // 2nd argument is that a mapping object
 // mapping object has tuple array for each property.
 // tuple is [Props to JSON, JSON to Props]  
-createConverter<PropsType, JSONType>(EntityConstructor, mappingObject)
+createConverter<PropsType, JSONType>(EntityConstructor, mappingObject): Converter<PropsType, JSONType>;
 ```
 
-mapping object has has tuple array for each property.
+`mappingObject` has tuple array for each property.
 
 ```ts
 const converter = createConverter<EntityProps, EntityJSON>(Entity, {
