@@ -5,6 +5,7 @@ export { ValueObject } from "./ValueObject";
 export { NonNullableRepository } from "./repository/NonNullableRepository";
 export { NullableRepository } from "./repository/NullableRepository";
 export { RepositoryCore } from "./repository/RepositoryCore";
+export { Repository } from "./repository/Repository";
 export {
     RepositoryEventEmitter,
     RepositoryDeletedEvent,

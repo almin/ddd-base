@@ -3,6 +3,7 @@ import { RepositoryCore } from "./RepositoryCore";
 import { MapLike } from "map-like";
 import { RepositoryEventEmitter } from "./RepositoryEventEmitter";
 import { EntityLike } from "../EntityLike";
+import { Repository } from "./Repository";
 
 /**
  * NullableRepository has not initial value.
@@ -12,7 +13,7 @@ export class NullableRepository<
     Entity extends EntityLike<any>,
     Props extends Entity["props"] = Entity["props"],
     Id extends Props["id"] = Props["id"]
-> {
+> implements Repository<Entity, Props, Id> {
     private core: RepositoryCore<Entity, Props, Id>;
 
     constructor() {
