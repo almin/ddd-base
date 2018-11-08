@@ -11,7 +11,7 @@
     "src/"
   ],
   "name": "ddd-base",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "DDD base class library for JavaScript application.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
