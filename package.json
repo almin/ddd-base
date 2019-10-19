@@ -50,7 +50,7 @@
     "husky": "^3.0.9",
     "lerna": "^3.18.1",
     "lint-staged": "^7.3.0",
-    "mocha": "^6.2.1",
+    "mocha": "^6.2.2",
     "prettier": "1.14.3",
     "rimraf": "^3.0.0",
     "ts-node": "^7.0.1",
