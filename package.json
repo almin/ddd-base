@@ -45,9 +45,9 @@
   "homepage": "https://github.com/almin/ddd-base",
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/node": "^10.17.18",
+    "@types/node": "^10.17.19",
     "cross-env": "^6.0.3",
-    "husky": "^4.2.3",
+    "husky": "^4.2.5",
     "lerna": "^3.20.2",
     "lint-staged": "^7.3.0",
     "mocha": "^6.2.3",
