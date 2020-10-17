@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.17.40",
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.2",
     "husky": "^4.3.0",
     "lerna": "^3.22.1",
     "lint-staged": "^7.3.0",
