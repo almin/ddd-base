@@ -903,9 +903,9 @@
     "@types/node" ">= 8"
 
 "@octokit/types@^6.0.0", "@octokit/types@^6.0.3":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.1.0.tgz#126197ceb802220fee920d5ea6d568c2c63365cc"
-  integrity sha512-bMWBmg77MQTiRkOVyf50qK3QECWOEy43rLy/6fTWZ4HEwAhNfqzMcjiBDZAowkILwTrFvzE1CpP6gD0MuPHS+A==
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.1.1.tgz#bc88b3eb5f447b025a2a1a8177a72db216e8d4ca"
+  integrity sha512-btm3D6S7VkRrgyYF31etUtVY/eQ1KzrNRqhFt25KSe2mKlXuLXJilglRC6eDA2P6ou94BUnk/Kz5MPEolXgoiw==
   dependencies:
     "@octokit/openapi-types" "^2.0.0"
     "@types/node" ">= 8"
