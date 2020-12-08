@@ -47,7 +47,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.17.48",
     "cross-env": "^6.0.3",
-    "husky": "^4.3.4",
+    "husky": "^4.3.5",
     "lerna": "^3.22.1",
     "lint-staged": "^7.3.0",
     "mocha": "^6.2.3",
