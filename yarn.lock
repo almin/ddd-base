@@ -2465,9 +2465,9 @@ git-up@^4.0.0:
     parse-url "^5.0.0"
 
 git-url-parse@^11.1.2:
-  version "11.4.1"
-  resolved "https://registry.yarnpkg.com/git-url-parse/-/git-url-parse-11.4.1.tgz#524471ffd88aac23e48a04ababee8bf4f8c576f0"
-  integrity sha512-a9K2hbukIcCsZYqVE5L9dm7qdkOzyvMfhbCdhN4FelH63V4hBlmlxCLUS1VL8Qu6v7SeeqT5A2vuj26OWNAz8Q==
+  version "11.4.3"
+  resolved "https://registry.yarnpkg.com/git-url-parse/-/git-url-parse-11.4.3.tgz#1610284edf1f14964180f5b3399ec68b692cfd87"
+  integrity sha512-LZTTk0nqJnKN48YRtOpR8H5SEfp1oM2tls90NuZmBxN95PnCvmuXGzqQ4QmVirBgKx2KPYfPGteX3/raWjKenQ==
   dependencies:
     git-up "^4.0.0"
 
